@@ -61,7 +61,7 @@
     }
 
     @keyframes rain {
-      0%   { transform: translateY(0) rotate(0deg); }
+      0% { transform: translateY(0) rotate(0deg); }
       100% { transform: translateY(110vh) rotate(360deg); }
     }
 
@@ -102,10 +102,30 @@
       font-weight: bold;
       border: none;
       border-radius: 5px;
-      cursor: default;
+      cursor: pointer;
       text-decoration: none;
       box-shadow: 0 0 10px rgba(0, 255, 100, 0.5);
       margin-bottom: 20px;
+      animation: pulse 2.5s infinite;
+      transition: transform 0.2s ease, background-color 0.2s ease;
+    }
+
+    .cta-button:hover {
+      background-color: #00994d;
+      transform: scale(1.05);
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+      100% { transform: scale(1); }
+    }
+
+    .countdown {
+      font-size: 1.2em;
+      margin-top: 10px;
+      color: #ffeb3b;
+      text-shadow: 1px 1px 4px rgba(0,0,0,0.6);
     }
 
     @media (max-width: 768px) {
@@ -141,10 +161,11 @@
         <div>📅 Deadline: <strong>April 15, 2025</strong></div>
       </div>
       <div class="cta-button">Start Now for $10.40 — Limited Time!</div>
+      <div class="countdown" id="countdown">Counting down...</div>
     </div>
   </div>
 
-  <!-- JavaScript to Generate Dollar Rain -->
+  <!-- JS: Dollar Rain -->
   <script>
     const rainContainer = document.querySelector('.dollar-rain');
     const dropCount = 40;
@@ -156,18 +177,40 @@
 
       const size = Math.random() * 1.5 + 0.5;
       drop.style.fontSize = size + 'em';
-
       drop.style.left = Math.random() * 100 + '%';
-
       const duration = Math.random() * 10 + 5;
       drop.style.animationDuration = duration + 's';
-
       drop.style.animationDelay = Math.random() * 10 + 's';
-
       drop.style.opacity = Math.random() * 0.5 + 0.5;
 
       rainContainer.appendChild(drop);
     }
+  </script>
+
+  <!-- JS: Countdown Timer -->
+  <script>
+    const countdownEl = document.getElementById('countdown');
+    const deadline = new Date('April 15, 2025 23:59:59').getTime();
+
+    function updateCountdown() {
+      const now = new Date().getTime();
+      const distance = deadline - now;
+
+      if (distance < 0) {
+        countdownEl.innerText = "Offer expired. IRS says 'maybe next year...'";
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      countdownEl.innerText = `Only ${days}d ${hours}h ${minutes}m ${seconds}s left to join for $10.40!`;
+    }
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
   </script>
 </body>
 </html>
